@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mb-5 w-50 border border-2 text-center p-5 mt-5 bg-dark text-light rounded ">
+  <h1 class="text-light">Orders</h1>
+    {% for i in orders %}
+    <div class="container border border-2 shadow mt-5">
+         <h2 class="text-success">Order ID : {{i.order_id}}</h2>
+         <p class="text-danger">Order Date : {{i.ordered_date}}</p>
+         <p class="text-warning">Amount : Rs.{{i.amount}}</p>
+         <p>Payment Method : {{i.payment_method}}</p>
+        {% for j in i.products.all %}
+    <div class="card mb-3" style="max-width:100%; align-items:center" >
+        <img src="{{j.product.image.url}}" class="rounded-start" height="200px" width="50%" style="image: cover;">
+        <div class="col-md-8">
+          <div class="card-body">
+               <p class="card-text"> {{j.product.name}}</p>
+              <p class="card-text">{{j.price}}</p>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

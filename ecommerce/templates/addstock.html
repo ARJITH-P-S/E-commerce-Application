@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mb-5 w-50 border border-2 text-center p-5 mt-5 bg-dark text-light rounded ">
+  <h1 class="text-light">Add Stock</h1>
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-success mt-3 w-25">Add Stock</button>
+  </form>
+
+</div>
+{% endblock %}

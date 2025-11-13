@@ -1,34 +1,13 @@
-<!DOCTYPE html>
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-
-<!--{{category.name}} <br>-->
-<!--{{category.description}} <br>-->
-<!--{{category.image.url}} <br>-->
-<!--{% for j in category.products.all %}-->
-<!--   {{j.name}}-->
-<!--   {{j.description}}-->
-<!--   {{j.price}}-->
-<!--{% endfor %}-->
-
-<div class="container">
-    <img src="{{category.image.url}}" height="400px" width="100%">
-</div>
-
 
    <!-- Start Products  -->
     <div class="products-box">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="title-all text-center">
-                        <h1>{{category.name}}</h1>
-                        <p>{{category.description}}</p>
-                    </div>
-                </div>
-            </div>
             <div class="row special-list">
-                {% for j in category.products.all %}
+              {% if products %}
+              {% for j in products %}
                 <div class="col-lg-3 col-md-6 special-grid best-seller">
                     <div class="products-single fix">
                         <div class="box-img-hover">
@@ -49,11 +28,13 @@
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-
-            </div>
         </div>
-    </div>
-    <!-- End Products  -->
 
+       {% endfor %}
+              {% else %}
+              <h1 class="text-danger fw-bold text-center">No results found</h1>
+              {% endif %}
+            </div>
+      </div>
+</div>
 {% endblock %}

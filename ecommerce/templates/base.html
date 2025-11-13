@@ -16,6 +16,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Site Icons -->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
@@ -120,68 +121,58 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navbar-menu">
                     <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
-                        <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="{% url 'shop:categoryview' %}">Home</a></li>
+
                         <li class="dropdown">
                             <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">SHOP</a>
                             <ul class="dropdown-menu">
-								<li><a href="shop.html">Sidebar Shop</a></li>
-								<li><a href="shop-detail.html">Shop Detail</a></li>
-                                <li><a href="cart.html">Cart</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="my-account.html">My Account</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
+								{% for i in links %}
+                                <li><a href="{% url 'shop:products' i.id %}">{{i.name}}</a></li>
+								{% endfor %}
                             </ul>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
+
+                        {% if user.is_authenticated %}
+                        {% if user.is_superuser %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:addcategory' %}">Add Categories</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:addproduct'  %}">Add Products</a></li>
+                        {% else %}
+                         <li class="nav-item"><a class="nav-link" href="{% url 'cart:orders' %}">Your Order</a></li>
+                        {% endif %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:logout' %}">Logout</a></li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:register' %}">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:login' %}">Login</a></li>
+                        {% endif %}
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
 
                 <!-- Start Atribute Navigation -->
                 <div class="attr-nav">
+                    {% if user.is_authenticated %}
+                    {% if user.is_superuser != True %}
                     <ul>
                         <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
-                        <li class="side-menu">
-							<a href="#">
+                        <li>
+							<a href="{% url 'cart:cartview' %}">
 								<i class="fa fa-shopping-bag"></i>
-								<span class="badge">3</span>
-								<p>My Cart</p>
+								<span class="badge">{{count}}</span>
 							</a>
 						</li>
                     </ul>
+                    {% endif %}
+                    {% endif %}
                 </div>
                 <!-- End Atribute Navigation -->
             </div>
-            <!-- Start Side Menu -->
-            <div class="side">
-                <a href="#" class="close-side"><i class="fa fa-times"></i></a>
-                <li class="cart-box">
-                    <ul class="cart-list">
-                        <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-01.jpg' }" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Delica omtantur </a></h6>
-                            <p>1x - <span class="price">$80.00</span></p>
-                        </li>
-                        <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-02.jpg' %}" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Omnes ocurreret</a></h6>
-                            <p>1x - <span class="price">$60.00</span></p>
-                        </li>
-                        <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-03.jpg' %}" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Agam facilisis</a></h6>
-                            <p>1x - <span class="price">$40.00</span></p>
-                        </li>
-                        <li class="total">
-                            <a href="#" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
-                            <span class="float-right"><strong>Total</strong>: $180.00</span>
-                        </li>
-                    </ul>
-                </li>
-            </div>
-            <!-- End Side Menu -->
+
+
+
+
+
+
+
         </nav>
         <!-- End Navigation -->
     </header>
@@ -190,60 +181,17 @@
     <!-- Start Top Search -->
     <div class="top-search">
         <div class="container">
+            <form action="{% url 'search:search' %}">
             <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control" placeholder="Search">
-                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+                <input type="text" class="form-control" placeholder="Search" name="q">
+                <button type="submit" class="btn"><i class="fa fa-search"></i></button>
             </div>
+            </form>
         </div>
     </div>
     <!-- End Top Search -->
 
-    <!-- Start Slider -->
-    <div id="slides-shop" class="cover-slides">
-        <ul class="slides-container">
-            <li class="text-center">
-                <img src="{% static 'images/banner-01.jpg' %}" alt="">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> Freshshop</strong></h1>
-                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
-                            <p><a class="btn hvr-hover" href="#">Shop New</a></p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="text-center">
-                <img src="{% static 'images/banner-02.jpg' %}" alt="">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> Freshshop</strong></h1>
-                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
-                            <p><a class="btn hvr-hover" href="#">Shop New</a></p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="text-center">
-                <img src="{% static 'images/banner-03.jpg' %}" alt="">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> Freshshop</strong></h1>
-                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
-                            <p><a class="btn hvr-hover" href="#">Shop New</a></p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-        <div class="slides-navigation">
-            <a href="#" class="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-            <a href="#" class="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-        </div>
-    </div>
+
     <!-- End Slider -->
 <!-- &lt;!&ndash; Start Categories  &ndash;&gt;-->
 <!--    <div class="categories-shop">-->
@@ -273,7 +221,7 @@
 <!--    &lt;!&ndash; End Categories &ndash;&gt;-->
 
 {% block content %}
-Heyy
+
 {% endblock %}
 
  <!-- Start Footer  -->
